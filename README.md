@@ -1,3 +1,3 @@
 # AndroidCRQ
 Репозиторий для поддержки
-Moodle CodeRunnerAndroid Questions
+Moodle CodeRunner Android Questions
