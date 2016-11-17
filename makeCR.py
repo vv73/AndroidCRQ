@@ -8,16 +8,17 @@ def add_element(element):
                 return
     elements.append(element)
 
-def parse_node(node, filename):
+def parse_node(node, filename, level):
     global elements;
     if node.nodeType == node.ELEMENT_NODE:
         element = {}
         element["tag"] = node.tagName
-        element["attr: name"] = filename
+        if level == 0:
+            element["attr: name"] = filename
         element["value"] = filename
         element["childs"] = [] 
         for (name, value) in node.attributes.items():
-            element["attr: "+name] = value
+            element["attr: " + name] = value
                               
         if node.childNodes:
             for child in node.childNodes:
@@ -25,7 +26,7 @@ def parse_node(node, filename):
                     element["value"] = child.wholeText.strip()
                      
                if child.nodeType == child.ELEMENT_NODE:
-                   n = parse_node(child,"")
+                   n = parse_node(child,filename, level + 1)
                    element["childs"].append(n)
         add_element(element)
         return len(elements) - 1;
@@ -72,7 +73,7 @@ public class CR{
              drawables += itemStart + element["attr: name"][:-4] + "=" + hex(i) + ";";
         if element["tag"] == "style":
             styles += itemStart + element["attr: name"] + "=" + hex(i) + ";";
-        if element["attr: name"].startswith("layout:"):
+        if "attr: name" in element and element["attr: name"].startswith("layout:"):
             layouts += itemStart + element["attr: name"][7:-4] + "=" + hex(i) + ";";    
         i += 1;
     print (ids + "\n}\n" + layouts + "\n}\n" + drawables + "\n}\n" + strings +"\n}\n" + styles +"\n}\n" + attrs + "\n}");
@@ -95,8 +96,10 @@ public class CR{
 
 import sys
 import os
+
 #root = sys.argv[1];
 root = "C:\\Users\\vv\\\AndroidStudioProjects\\Test\\app\\src\\main\\res"
+
 folders = next(os.walk(root))[1]
 
 for folder in folders:
@@ -110,11 +113,9 @@ for folder in folders:
                add_element(element)
         if file.endswith(".xml"):
            xmldoc = minidom.parse(root+"/"+folder+"/"+file).documentElement
-           parse_node(xmldoc, folder+":"+file);
+           parse_node(xmldoc, folder+":"+file, 0);
            
-
+sys.stdout = open('CR.java', 'w')
 printR()
-            
-import time
+sys.stdout.close()            
 
-#time.sleep(10)
