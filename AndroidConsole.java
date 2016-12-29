@@ -137,10 +137,11 @@ class Button extends TextView {
 }
 
 class ImageView extends View {
-	private int drawableId;
+	private int drawableId = -1;
 
 	public ImageView(Context context, int id) {
 		super(context, id);
+	    drawableId = -1;
 
 	}
 
@@ -293,10 +294,6 @@ public class Test {
 		AppTest.setActivity(new MainActivity());
 		AppTest.runActivity();
 		{{TEST.testcode}}
-	}
-
-	static {
-		System.setSecurityManager(new SecurityManager());
 	}
 }
 
